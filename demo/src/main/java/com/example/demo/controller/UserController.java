@@ -29,7 +29,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping
     public ResponseEntity getOneUser(@RequestParam Long id) {
         try {
@@ -37,6 +36,15 @@ public class UserController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Произошла ошибка");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser (@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(userService.deleteUser(id));
+        }  catch (Exception e) {
             return ResponseEntity.badRequest().body("Произошла ошибка");
         }
     }
