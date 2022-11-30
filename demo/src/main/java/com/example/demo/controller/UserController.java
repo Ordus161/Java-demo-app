@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserEntity;
 import com.example.demo.exception.UserAlreadyExistException;
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-//Reminder:@Autowired - mark for the Spring,means that userRepo should be initialized by framework
+    //Reminder:@Autowired - mark for the Spring,means that userRepo should be initialized by framework
     @Autowired
     private UserService userService;
 
@@ -30,12 +31,13 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity getUsers(){
+    public ResponseEntity getOneUser(@RequestParam Long id) {
         try {
-            return ResponseEntity.ok("Сервер работатет");
+            return ResponseEntity.ok(userService.getOne(id));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-        return ResponseEntity.badRequest().body("Произошла ошибка");
-            }
+            return ResponseEntity.badRequest().body("Произошла ошибка");
         }
     }
-
+}
